@@ -30,6 +30,13 @@ import requests_html
 import sortedcontainers
 import tqdm
 
+#CI uses exit code 1 as a signal that no new version is found
+#so have to produce a different exit code on an exception
+def _excepthook(type,value,traceback):
+    logging.error("Unhandled exception occured",exc_info=(type,value,traceback))
+    sys.exit(2)
+sys.excepthook = _excepthook
+
 logger = logging.getLogger(__name__)
 
 CUTOFF_VERSION=packaging.version.Version('3.10')
